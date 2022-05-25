@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
+import useAuth from '../hooks/useAuth';
 
 interface Inputs {
     email: string
@@ -10,9 +11,18 @@ interface Inputs {
 
 const login = () => {
     const [login, setLogin] = useState(false);
+    const { signIn, signUp} = useAuth()
+
     const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
 
-    const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
+
+    const onSubmit: SubmitHandler<Inputs> = async ({email, password}) => {
+        if (login) {
+            await signIn(email, password)
+        } else {
+            await signUp(email, password)
+        }
+    }
 
   return (
     <div className='relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent'>
@@ -56,11 +66,11 @@ const login = () => {
                 </label>
             </div>
             
-            <button className='w-full rounded bg-[#e50914] py-3 font-semibold'>Sign In</button>
+            <button className='w-full rounded bg-[#e50914] py-3 font-semibold' onClick={() => setLogin(true)}>Sign In</button>
 
             <div className='text-[gray]'>
                 New to Netflix?{' '}
-                <button type='submit' className='text-white hover:underline'>Sign up right now</button>
+                <button type='submit' className='text-white hover:underline' onClick={() => setLogin(false)}>Sign up right now</button>
             </div>
         </form>
     </div>
