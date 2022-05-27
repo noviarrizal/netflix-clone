@@ -58,7 +58,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
         }),[auth]
     )
 
-    // Signup Function
+    // Sign up Function
     const signUp = async (email: string, password: string) => {
         setLoading(true)
 
